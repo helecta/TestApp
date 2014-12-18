@@ -10,7 +10,7 @@
 
 @implementation CWTextBuilder
 
-+ (NSArray *)listFromJSON:(NSArray *)objectNotation error:(NSError **)error
++ (NSArray *)listFromJSON:(NSArray *)objectNotation error:(NSError **)error oldList:(NSArray *)oldList
 {
     NSMutableArray *list = [[NSMutableArray alloc] init];
     
@@ -19,7 +19,11 @@
         for (NSString *key in singleText)
         {
             if([key isEqualToString:@"id"])
+            {
                 newText.cwId = [singleText valueForKey:key];
+                if([oldList containsObject:newText] )
+                    newText = [oldList objectAtIndex:[oldList indexOfObject:newText]];
+            }
             else if([key isEqualToString:@"text"])
                 newText.cwText = [singleText valueForKey:key];
             else if([key isEqualToString:@"title"])

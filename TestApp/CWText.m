@@ -11,4 +11,16 @@
 @implementation CWText
 @synthesize cwId, cwText, cwTitle;
 
+- (BOOL)isEqual:(id)object {
+    if (object == self)
+        return YES;
+    if (!object || ![object isKindOfClass:[self class]])
+        return NO;
+    
+    CWText * other = object;
+    if (self.cwId != other.cwId)
+        return NO;
+    return YES;
+}
+
 @end

@@ -30,6 +30,12 @@
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
     
+    _rightButton = self.navigationItem.rightBarButtonItem;
+    _activityIndicatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReloadIcon"]];
+    [self rotateLayerInfinite:_activityIndicatorImage.layer];
+    if(_rightButtonInProgress == nil)
+        _rightButtonInProgress = [[UIBarButtonItem alloc]initWithCustomView:_activityIndicatorImage];
+    
     self.reachability = [Reachability reachabilityForInternetConnection];
     [self.reachability startNotifier];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -38,10 +44,10 @@
                                                object:nil];
     
     if([self.reachability currentReachabilityStatus] == NotReachable)
-        [self showAlertView];
+        [self showAlertViewInternetDown];
     else
     {
-        [_manager startGetList];
+        [self startGetList];
         [self startTimedTask];
     }
 }
@@ -51,6 +57,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) startGetList
+{
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = _rightButtonInProgress;
+    
+    [_manager startGetList:_list];
+}
+
+#pragma mark - Events
+- (IBAction)reloadList:(id)sender
+{
+    [self startGetList];
+    NSLog(@"Mannual update Data");
+}
 
 #pragma mark - Segues
 
@@ -89,16 +109,60 @@
 #pragma mark - CrazyWheelManager
 - (void)didGetList:(NSArray *) newList
 {
-    if(![_list isEqualToArray:newList])
+    if([_list count] != 0)
+    {
+        NSInteger oldListCount = [_list count];
+        NSInteger newListCount = [newList count];
+        
+        if(newListCount < oldListCount)
+        {
+            NSMutableArray* rowsToRemove = [[NSMutableArray alloc] init];
+            for(NSInteger i = 1; i <= (oldListCount - newListCount); i++)
+                [rowsToRemove addObject:[NSIndexPath indexPathForRow:(oldListCount - i) inSection:0]];
+            [self.tableView reloadRowsAtIndexPaths:rowsToRemove withRowAnimation:UITableViewRowAnimationRight];
+            
+            _list = newList;
+            [self.tableView reloadData];
+            
+            NSMutableArray* rowsToUpdate = [[NSMutableArray alloc] init];
+            for(NSInteger i = 0; i < newListCount; i++)
+                [rowsToUpdate addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            [self.tableView reloadRowsAtIndexPaths:rowsToUpdate withRowAnimation:UITableViewRowAnimationNone];
+        }
+        else
+        {
+            _list = newList;
+            [self.tableView reloadData];
+            NSMutableArray* rowsToAdd = [[NSMutableArray alloc] init];
+            for(NSInteger i = 1; i <= (newListCount - oldListCount); i++)
+                [rowsToAdd addObject:[NSIndexPath indexPathForRow:(newListCount - i) inSection:0]];
+            
+            NSMutableArray* rowsToUpdate = [[NSMutableArray alloc] init];
+            for(NSInteger i = 0; i < oldListCount; i++)
+                [rowsToUpdate addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+            
+            [self.tableView reloadRowsAtIndexPaths:rowsToAdd withRowAnimation:UITableViewRowAnimationLeft];
+            [self.tableView reloadRowsAtIndexPaths:rowsToUpdate withRowAnimation:UITableViewRowAnimationNone];
+        }
+        
+        //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+    }
+    else
     {
         _list = newList;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+        [self.tableView reloadData];
     }
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        //code to be executed on the main queue after delay
+        self.navigationItem.rightBarButtonItem = _rightButton;
+    });
     
 }
 - (void)getListFailedWithError:(NSError *)error
 {
-    
+    [self showAlertViewServerProblem];
 }
 
 #pragma mark - Timer
@@ -117,7 +181,7 @@
 }
 - (void)performBackgroundTask
 {
-    [_manager startGetList];
+    [self startGetList];
     NSLog(@"Update Data");
 }
 #pragma mark - Internet cheker
@@ -130,21 +194,21 @@
         case NotReachable:
         {
             NSLog(@"The internet is down.");
-            [self showAlertView];
+            [self showAlertViewInternetDown];
             [self stopTimedTask];
             break;
         }
         case ReachableViaWiFi:
         {
             NSLog(@"The internet is working via WIFI.");
-            [_manager startGetList];
+            [self startGetList];
             [self startTimedTask];
             break;
         }
         case ReachableViaWWAN:
         {
             NSLog(@"The internet is working via WWAN.");
-            [_manager startGetList];
+            [self startGetList];
             [self startTimedTask];
             break;
         }
@@ -152,7 +216,7 @@
 }
 
 #pragma mark - AlertView
--(void) showAlertView
+-(void) showAlertViewInternetDown
 {
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil)
                                                       message:NSLocalizedString(@"The internet is down.", nil)
@@ -161,14 +225,25 @@
                                             otherButtonTitles: nil];
     [message show];
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+-(void) showAlertViewServerProblem
 {
-//    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-//    
-//    if([title isEqualToString:@"Button 1"])
-//    {
-//        NSLog(@"Button 1 was selected.");
-//    }  NSLog(@"Button 3 was selected.");
-    
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil)
+                                                      message:NSLocalizedString(@"Problem with server", nil)
+                                                     delegate:nil
+                                            cancelButtonTitle:NSLocalizedString(@"Ok", nil)
+                                            otherButtonTitles: nil];
+    [message show];
+}
+#pragma mark - Animations in view
+- (void)rotateLayerInfinite:(CALayer *)layer
+{
+    CABasicAnimation *rotation;
+    rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    rotation.fromValue = [NSNumber numberWithFloat:0];
+    rotation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
+    rotation.duration = 0.9f; // Speed
+    rotation.repeatCount = HUGE_VALF; // Repeat forever. Can be a finite number.
+    [layer removeAllAnimations];
+    [layer addAnimation:rotation forKey:@"Spin"];
 }
 @end

@@ -10,7 +10,7 @@
 
 @implementation CrazyWheelCommunicator
 
-- (void)getList
+- (void)getList:(NSArray *)oldList
 {
     NSString *urlAsString = [NSString stringWithFormat:@"%@", DOMAIN_NAME];
     
@@ -22,7 +22,7 @@
         NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:responseObject
                                                              options:0
                                                                error:nil];
-        [self.delegate receivedGetListJSONAnswer:jsonArray];
+        [self.delegate receivedGetListJSONAnswer:jsonArray oldList:oldList];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.delegate getListFailedWithError:error];
     }];

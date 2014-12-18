@@ -56,7 +56,14 @@
                             <outlet property="delegate" destination="UPk-Fk-0Dg" id="Ciu-eX-4DQ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Crazy Wheel" id="MTu-oN-rIy"/>
+                    <navigationItem key="navigationItem" title="Crazy Wheel" id="MTu-oN-rIy">
+                        <barButtonItem key="rightBarButtonItem" image="ReloadIcon" id="doD-sG-g2Z">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="reloadList:" destination="UPk-Fk-0Dg" id="ZXr-mU-5xp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xBB-uD-Za1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -116,4 +123,7 @@
             <point key="canvasLocation" x="-2" y="-610"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ReloadIcon" width="25" height="25"/>
+    </resources>
 </document>

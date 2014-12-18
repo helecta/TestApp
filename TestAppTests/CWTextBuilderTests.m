@@ -35,7 +35,7 @@
                                 @{ @"id": @"ID2",
                                    @"id": @"13",
                                    @"id": @"Time to die: 5s"}];
-    NSArray *list = [CWTextBuilder listFromJSON:jsonDictionary error:&error];
+    NSArray *list = [CWTextBuilder listFromJSON:jsonDictionary error:&error oldList:nil];
     CWText *firstElement = [list firstObject];
     XCTAssertEqual([list count], 2, @"List must have 2 elements");
     XCTAssertEqual(firstElement.cwId, @"ID1", @"First element must be ID1");

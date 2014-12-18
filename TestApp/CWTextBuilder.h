@@ -11,6 +11,6 @@
 
 @interface CWTextBuilder : NSObject
 
-+ (NSArray *)listFromJSON:(NSArray *)objectNotation error:(NSError **)error;
++ (NSArray *)listFromJSON:(NSArray *)objectNotation error:(NSError **)error oldList:(NSArray *)oldList;
 
 @end

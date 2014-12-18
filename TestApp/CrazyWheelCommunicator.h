@@ -13,7 +13,7 @@
 @protocol CrazyWheelCommunicatorDelegate <NSObject>
 
 //Get list
-- (void)receivedGetListJSONAnswer:(NSArray *)objectNotation;
+- (void)receivedGetListJSONAnswer:(NSArray *)objectNotation oldList:(NSArray *)oldList;
 - (void)getListFailedWithError:(NSError *)error;
 
 @end
@@ -22,6 +22,6 @@
 
 @property (weak, nonatomic) id<CrazyWheelCommunicatorDelegate> delegate;
 
-- (void)getList;
+- (void)getList:(NSArray *)oldList;
 
 @end

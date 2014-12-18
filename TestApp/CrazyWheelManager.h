@@ -23,6 +23,6 @@
 @property (strong, nonatomic) CrazyWheelCommunicator *communicator;
 @property (weak, nonatomic) id<CrazyWheelManagerDelegate> delegate;
 
-- (void)startGetList;
+- (void)startGetList:(NSArray *)oldList;
 
 @end

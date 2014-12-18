@@ -14,14 +14,19 @@
 
 @class DetailViewController;
 
-@interface CrazyWheelViewController : UITableViewController<CrazyWheelManagerDelegate, UIAlertViewDelegate>
+@interface CrazyWheelViewController : UITableViewController<CrazyWheelManagerDelegate>
 {
     CrazyWheelManager *_manager;
     NSArray *_list;
     NSTimer *_taskTimer;
+    UIBarButtonItem *_rightButton;
+    UIBarButtonItem *_rightButtonInProgress;
+    UIImageView *_activityIndicatorImage;
 }
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (strong, nonatomic) Reachability *reachability;
+
+- (IBAction)reloadList:(id)sender;
 
 @end
 

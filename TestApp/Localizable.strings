@@ -9,5 +9,6 @@
 //Alert View
 "Warning" = "Warning";
 "The internet is down." = "The internet is down. Check your internet connection.";
+"Problem with server" = "Problem with server. Try later.";
 "Ok" = "Ok";
 "Try again" = "Try again";

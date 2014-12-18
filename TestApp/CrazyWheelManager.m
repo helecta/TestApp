@@ -10,17 +10,17 @@
 
 @implementation CrazyWheelManager
 
-- (void)startGetList
+- (void)startGetList:(NSArray *)oldList
 {
-    [self.communicator getList];
+    [self.communicator getList:oldList];
 }
 
 #pragma mark - CrazyWheelCommunicator
 //get list
-- (void)receivedGetListJSONAnswer:(NSArray *)objectNotation
+- (void)receivedGetListJSONAnswer:(NSArray *)objectNotation oldList:(NSArray *)oldList
 {
     NSError *error = nil;
-    NSArray *list = [CWTextBuilder listFromJSON:objectNotation error:&error];
+    NSArray *list = [CWTextBuilder listFromJSON:objectNotation error:&error oldList:oldList];
     
     if (error != nil) {
         [self.delegate getListFailedWithError:error];        
