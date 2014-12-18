@@ -8,3 +8,4 @@
 
 //COMMON
 #define DOMAIN_NAME @"http://crazy-dev.wheely.com"
+#define NAV_BAR_TITLE_FONT_SIZE 20.0f

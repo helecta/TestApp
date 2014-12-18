@@ -35,6 +35,9 @@
     [self rotateLayerInfinite:_activityIndicatorImage.layer];
     if(_rightButtonInProgress == nil)
         _rightButtonInProgress = [[UIBarButtonItem alloc]initWithCustomView:_activityIndicatorImage];
+    _rightButtonInProgress.enabled = NO;
+    [self configNavBarTitle:NSLocalizedString(@"Crazy Wheels", @"title")];
+    [self configNavBarBackItem];
     
     self.reachability = [Reachability reachabilityForInternetConnection];
     [self.reachability startNotifier];
@@ -77,8 +80,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         DetailViewController *destController = [segue destinationViewController];
-        //NSIndexPath * path = [self.tableView indexPathForCell:sender];
-        [destController setTitleText:@"Text"];
+        NSIndexPath * path = [self.tableView indexPathForCell:sender];
+        [destController setCurrentText:[_list objectAtIndex:path.row]];
     }
 }
 
@@ -245,5 +248,26 @@
     rotation.repeatCount = HUGE_VALF; // Repeat forever. Can be a finite number.
     [layer removeAllAnimations];
     [layer addAnimation:rotation forKey:@"Spin"];
+}
+
+#pragma mark - UINav
+-(void) configNavBarTitle:(NSString *)title
+{
+    NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIColor blackColor],NSForegroundColorAttributeName,
+                                    [UIColor blackColor],NSBackgroundColorAttributeName,
+                                    [UIFont fontWithName:@"HelveticaNeue" size:NAV_BAR_TITLE_FONT_SIZE], NSFontAttributeName, nil];
+    self.navigationController.navigationBar.titleTextAttributes = textAttributes;
+    self.navigationController.navigationBar.topItem.title = title;
+}
+-(void)configNavBarBackItem
+{
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+                                   initWithTitle:@""
+                                   style:UIBarButtonItemStylePlain
+                                   target:nil
+                                   action:nil];
+    self.navigationItem.backBarButtonItem=backButton;
+    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
 }
 @end
