@@ -11,15 +11,17 @@
 #import "CrazyWheelManager.h"
 #import "CWTableViewCell.h"
 
+
 @class DetailViewController;
 
-@interface CrazyWheelViewController : UITableViewController<CrazyWheelManagerDelegate>
+@interface CrazyWheelViewController : UITableViewController<CrazyWheelManagerDelegate, UIAlertViewDelegate>
 {
     CrazyWheelManager *_manager;
     NSArray *_list;
+    NSTimer *_taskTimer;
 }
 @property (strong, nonatomic) DetailViewController *detailViewController;
-
+@property (strong, nonatomic) Reachability *reachability;
 
 @end
 

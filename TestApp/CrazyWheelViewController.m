@@ -30,11 +30,20 @@
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
     
+    self.reachability = [Reachability reachabilityForInternetConnection];
+    [self.reachability startNotifier];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reachabilityChanged:)
                                                  name:kReachabilityChangedNotification
                                                object:nil];
-    [_manager startGetList];
+    
+    if([self.reachability currentReachabilityStatus] == NotReachable)
+        [self showAlertView];
+    else
+    {
+        [_manager startGetList];
+        [self startTimedTask];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -80,12 +89,36 @@
 #pragma mark - CrazyWheelManager
 - (void)didGetList:(NSArray *) newList
 {
-    _list = newList;
-    [self.tableView reloadData];
+    if(![_list isEqualToArray:newList])
+    {
+        _list = newList;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+    }
+    
 }
 - (void)getListFailedWithError:(NSError *)error
 {
     
+}
+
+#pragma mark - Timer
+- (void)startTimedTask
+{
+    if(_taskTimer == nil)
+        _taskTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(performBackgroundTask) userInfo:nil repeats:YES];
+}
+-(void)stopTimedTask
+{
+    if(_taskTimer != nil)
+    {
+        [_taskTimer invalidate];
+        _taskTimer = nil;
+    }
+}
+- (void)performBackgroundTask
+{
+    [_manager startGetList];
+    NSLog(@"Update Data");
 }
 #pragma mark - Internet cheker
 -(void) reachabilityChanged:(NSNotification *)notice
@@ -97,18 +130,45 @@
         case NotReachable:
         {
             NSLog(@"The internet is down.");
+            [self showAlertView];
+            [self stopTimedTask];
             break;
         }
         case ReachableViaWiFi:
         {
             NSLog(@"The internet is working via WIFI.");
+            [_manager startGetList];
+            [self startTimedTask];
             break;
         }
         case ReachableViaWWAN:
         {
             NSLog(@"The internet is working via WWAN.");
+            [_manager startGetList];
+            [self startTimedTask];
             break;
         }
     }
+}
+
+#pragma mark - AlertView
+-(void) showAlertView
+{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", nil)
+                                                      message:NSLocalizedString(@"The internet is down.", nil)
+                                                     delegate:nil
+                                            cancelButtonTitle:NSLocalizedString(@"Ok", nil)
+                                            otherButtonTitles: nil];
+    [message show];
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+//    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+//    
+//    if([title isEqualToString:@"Button 1"])
+//    {
+//        NSLog(@"Button 1 was selected.");
+//    }  NSLog(@"Button 3 was selected.");
+    
 }
 @end

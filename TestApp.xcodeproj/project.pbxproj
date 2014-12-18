@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		10721905AC971091D12A2F4C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1C2C3F32E52B7280CA553A /* libPods.a */; };
 		1A555C971A42288F00EEAB10 /* CWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A555C961A42288F00EEAB10 /* CWTableViewCell.m */; };
+		1A555C991A42BB8C00EEAB10 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A555C981A42BB8C00EEAB10 /* Localizable.strings */; };
 		1A65D92B1A41DF580053B052 /* CrazyWheelCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A65D92A1A41DF580053B052 /* CrazyWheelCommunicator.m */; };
 		1A65D9321A41E15C0053B052 /* CrazyWheelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A65D9311A41E15C0053B052 /* CrazyWheelManager.m */; };
 		1A65D9351A41E2890053B052 /* CWTextBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A65D9341A41E2890053B052 /* CWTextBuilder.m */; };
@@ -37,6 +38,7 @@
 /* Begin PBXFileReference section */
 		1A555C951A42288F00EEAB10 /* CWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWTableViewCell.h; sourceTree = "<group>"; };
 		1A555C961A42288F00EEAB10 /* CWTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWTableViewCell.m; sourceTree = "<group>"; };
+		1A555C981A42BB8C00EEAB10 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		1A65D9291A41DF580053B052 /* CrazyWheelCommunicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrazyWheelCommunicator.h; sourceTree = "<group>"; };
 		1A65D92A1A41DF580053B052 /* CrazyWheelCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrazyWheelCommunicator.m; sourceTree = "<group>"; };
 		1A65D92D1A41E0890053B052 /* CrazyWheelConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CrazyWheelConstants.h; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				1A65D92D1A41E0890053B052 /* CrazyWheelConstants.h */,
+				1A555C981A42BB8C00EEAB10 /* Localizable.strings */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A8C63FF1A408BC0006A2535 /* Main.storyboard in Resources */,
+				1A555C991A42BB8C00EEAB10 /* Localizable.strings in Resources */,
 				1A8C64041A408BC0006A2535 /* LaunchScreen.xib in Resources */,
 				1A8C64011A408BC0006A2535 /* Images.xcassets in Resources */,
 			);

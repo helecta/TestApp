@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  TestApp
+
+  Created by Liliya Fedotova on 18.12.14.
+  Copyright (c) 2014 peekaboo. All rights reserved.
+*/
+
+//Alert View
+"Warning" = "Warning";
+"The internet is down." = "The internet is down. Check your internet connection.";
+"Ok" = "Ok";
+"Try again" = "Try again";
