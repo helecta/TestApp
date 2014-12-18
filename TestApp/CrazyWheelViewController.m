@@ -73,6 +73,7 @@
 - (IBAction)reloadList:(id)sender
 {
     [self startGetList];
+    [self startTimedTask];
     NSLog(@"Mannual update Data");
 }
 
@@ -167,13 +168,14 @@
 - (void)getListFailedWithError:(NSError *)error
 {
     [self showAlertViewServerProblem];
+    [self stopTimedTask];
 }
 
 #pragma mark - Timer
 - (void)startTimedTask
 {
     if(_taskTimer == nil)
-        _taskTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(performBackgroundTask) userInfo:nil repeats:YES];
+        _taskTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(performBackgroundTask) userInfo:nil repeats:YES];
 }
 -(void)stopTimedTask
 {
