@@ -7,11 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Reachability.h"
+#import "CrazyWheelManager.h"
+#import "CWTableViewCell.h"
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
-
+@interface CrazyWheelViewController : UITableViewController<CrazyWheelManagerDelegate>
+{
+    CrazyWheelManager *_manager;
+    NSArray *_list;
+}
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
 
