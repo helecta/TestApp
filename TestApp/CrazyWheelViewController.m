@@ -63,6 +63,7 @@
 -(void) startGetList
 {
     self.navigationItem.rightBarButtonItem = nil;
+    [self rotateLayerInfinite:_activityIndicatorImage.layer];
     self.navigationItem.rightBarButtonItem = _rightButtonInProgress;
     
     [_manager startGetList:_list];
