@@ -19,7 +19,7 @@
     
     CWText * other = object;
     if (self.cwId != other.cwId)
-        return NO;
+        return YES;
     return YES;
 }
 
